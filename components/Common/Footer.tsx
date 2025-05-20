@@ -3,7 +3,7 @@ import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 mt-auto">
+    <footer className="bg-gray-50 ">
       <div className="w-4/5 mx-auto py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* About Section */}

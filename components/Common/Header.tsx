@@ -31,13 +31,13 @@ export default function Header() {
         <div className="flex justify-center items-center gap-2">
           <Link
             href="/login"
-            className="bg-background-primary py-2 px-4 rounded-3xl font-semibold text-primary hover:bg-primary hover:text-white transition-all duration-300"
+            className="bg-background-primary py-2 px-4 rounded-3xl font-semibold text-white hover:bg-primary hover:text-text-primary transition-all duration-300 hover:border-text-primary border border-transparent hover:bg-transparent"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="py-2 px-4 rounded-3xl font-semibold text-primary border border-primary hover:bg-primary hover:text-white transition-all duration-300"
+            className="py-2 px-4 rounded-3xl font-semibold text-text-primary border border-text-primary hover:bg-background-primary hover:text-white transition-all duration-300"
           >
             Register
           </Link>

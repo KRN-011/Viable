@@ -24,10 +24,16 @@ module.exports = {
         background: {
           primary: 'rgb(var(--background-primary) / <alpha-value>)',
           secondary: 'rgb(var(--background-secondary) / <alpha-value>)',
+          light: 'rgb(var(--background-light) / <alpha-value>)',
+          dark: 'rgb(var(--background-dark) / <alpha-value>)',
+          muted: 'rgb(var(--background-muted) / <alpha-value>)',
+          lightMuted: 'rgb(var(--background-light-muted) / <alpha-value>)',
         },
         text: {
           primary: 'rgb(var(--text-primary) / <alpha-value>)',
           secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
+          muted: 'rgb(var(--text-muted) / <alpha-value>)',
+          lightMuted: 'rgb(var(--text-light-muted) / <alpha-value>)',
         },
       },
     },
