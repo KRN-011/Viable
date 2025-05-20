@@ -1,4 +1,4 @@
-import client from "@/app/lib/apolloClient";
+import client from "@/lib/apolloClient";
 import { gql } from "@apollo/client";
 
 export const BLOGS_QUERY = gql`
