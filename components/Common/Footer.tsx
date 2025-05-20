@@ -3,13 +3,13 @@ import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 mt-20 fixed bottom-0 w-full">
+    <footer className="bg-gray-50 mt-auto">
       <div className="w-4/5 mx-auto py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-sky-700">About Us</h3>
-            <p className="text-gray-600">
+            <h3 className="font-semibold text-lg text-primary">About Us</h3>
+            <p className="text-muted">
               Share your thoughts and ideas with <br />
               the world through our blogging platform.
             </p>
@@ -17,29 +17,29 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-sky-700">Quick Links</h3>
+            <h3 className="font-semibold text-lg text-primary">Quick Links</h3>
             <div className="flex flex-col space-y-2">
               <Link
                 href="/"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 Home
               </Link>
               <Link
                 href="/posts"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 Posts
               </Link>
               <Link
                 href="/about"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 Contact
               </Link>
@@ -48,7 +48,7 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg text-sky-700">
+            <h3 className="font-semibold text-lg text-primary">
               Connect With Us
             </h3>
             <div className="flex space-x-4">
@@ -56,7 +56,7 @@ export default function Footer() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 <FaGithub size={24} />
               </a>
@@ -64,7 +64,7 @@ export default function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 <FaTwitter size={24} />
               </a>
@@ -72,7 +72,7 @@ export default function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-sky-700 transition-colors"
+                className="text-muted hover:text-primary transition-colors"
               >
                 <FaLinkedin size={24} />
               </a>
@@ -82,7 +82,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-          <p className="text-gray-600">
+          <p className="text-muted">
             © {new Date().getFullYear()} Your Blog Name. All rights reserved.
           </p>
         </div>
