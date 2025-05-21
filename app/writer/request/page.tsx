@@ -1,13 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommonLayout from "@/layouts/commonLayout";
+import { requestToBecomeWriter } from "@/graphql/mutation/users";
+import Cookies from "js-cookie";
+import updateUserCookie from "@/lib/updateUserCookie";
+import { useRouter } from "next/navigation";
 
 export default function WriterRequest() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = () => {
-    setIsSubmitted(true);
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      await updateUserCookie();
+      const user = Cookies.get("user");
+      const userData = user ? JSON.parse(user) : null;
+      if (
+        userData &&
+        userData.RequestToBecomeWriter &&
+        !userData.WriterConfirmed
+      ) {
+        setIsSubmitted(true);
+      }
+      if (userData && userData.WriterConfirmed) {
+        router.push("/writer/confirmed");
+      }
+    };
+
+    checkUserStatus();
+  }, []);
+
+  const handleSubmit = async () => {
+    const data = await requestToBecomeWriter();
+    if (data) {
+      setIsSubmitted(true);
+      updateUserCookie();
+    } else {
+      console.log("Error"); // TODO: Add Toast message
+    }
   };
 
   return (

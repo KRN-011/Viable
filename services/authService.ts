@@ -66,14 +66,14 @@ class AuthService {
         },
       });
 
-      if (!response.data) {
+      const data = response.data;
+
+      if (!data) {
         return {
           success: false,
           message: "User not found",
         };
       }
-
-      const data = response.data;
 
       return data;
     } catch (error) {

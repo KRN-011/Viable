@@ -5,17 +5,45 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
-
-const isAuthRoutes = ["/login", "/register"];
+import updateUserCookie from "@/lib/updateUserCookie";
+import { User } from "@/types/userTypes";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAuthRoute, setIsAuthRoute] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // check if the user is on authentication routes, if true -> Hide login and register buttons
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAuthRoute, setIsAuthRoute] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userData, setUserData] = useState<User | null>(null);
   const pathname = usePathname();
+
+  // Initialize user data and auth state
   useEffect(() => {
+    const initializeUser = async () => {
+      try {
+        setIsLoading(true);
+        const token = Cookies.get("token");
+        if (token) {
+          await updateUserCookie();
+          const user = Cookies.get("user");
+          if (user) {
+            setUserData(JSON.parse(user));
+            setIsLoggedIn(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing user:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeUser();
+  }, []);
+
+  // check if the user is on authentication routes
+  useEffect(() => {
+    const isAuthRoutes = ["/login", "/register"];
     setIsAuthRoute(isAuthRoutes.includes(pathname));
   }, [pathname]);
 
@@ -30,14 +58,16 @@ export default function Header() {
   // handle logout
   const handleLogout = () => {
     Cookies.remove("token");
-    localStorage.removeItem("user");
+    Cookies.remove("user");
     setIsLoggedIn(false);
+    setUserData(null);
+    toast.success("Logout successful");
     window.location.href = "/login";
   };
 
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-background-secondary/20 backdrop-blur-sm">
-      <div className="w-4/5 mx-auto py-5">
+  if (isLoading) {
+    return (
+      <header className="w-4/5 mx-auto py-5 sticky top-0 z-50">
         <div className="flex justify-between items-center w-full mx-auto">
           <div>
             <Image
@@ -48,30 +78,65 @@ export default function Header() {
               className=""
             />
           </div>
-          {!isLoading && (
-            <div className="flex justify-center items-center gap-8">
-              <Link
-                href="/"
-                className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
-              >
-                Home
-              </Link>
-              <Link
-                href="/posts"
-                className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
-              >
-                Posts
-              </Link>
-              <Link
-                href="/writer/request"
-                className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
-              >
-                Become a Writer
-              </Link>
-            </div>
-          )}
-          {isLoggedIn && !isLoading ? (
-            <div className="flex justify-center items-center gap-2">
+        </div>
+      </header>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-background-light/80 backdrop-blur-sm py-5 sticky top-0 z-50 "
+    >
+      <header className="w-4/5 mx-auto">
+        <div className="flex justify-between items-center w-full mx-auto">
+          <div>
+            <Image
+              src="/viable-logo.png"
+              alt="logo"
+              width={120}
+              height={120}
+              className=""
+            />
+          </div>
+          <div className="flex justify-center items-center gap-8">
+            <Link
+              href="/"
+              className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+            >
+              Home
+            </Link>
+            <Link
+              href="/posts"
+              className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+            >
+              Posts
+            </Link>
+          </div>
+          {isLoggedIn ? (
+            <div className="flex items-center gap-8">
+              {userData && (
+                <>
+                  {!userData.WriterConfirmed && (
+                    <Link
+                      href="/writer/request"
+                      className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+                    >
+                      Become a Writer
+                    </Link>
+                  )}
+                  {/* {userData.WriterConfirmed && (
+                    <Link
+                      href="/posts/create"
+                      className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+                    >
+                      Create Post
+                    </Link>
+                  )} */}
+                </>
+              )}
               <button
                 onClick={handleLogout}
                 className="bg-background-primary py-2 px-4 rounded-3xl font-semibold text-white hover:bg-primary hover:text-text-primary transition-all duration-300 hover:border-text-primary border border-transparent hover:bg-transparent"
@@ -80,8 +145,7 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            !isAuthRoute &&
-            !isLoading && (
+            !isAuthRoute && (
               <div className="flex justify-center items-center gap-2">
                 <Link
                   href="/login"
@@ -99,7 +163,7 @@ export default function Header() {
             )
           )}
         </div>
-      </div>
-    </header>
+      </header>
+    </motion.div>
   );
 }
