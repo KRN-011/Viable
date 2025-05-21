@@ -57,6 +57,29 @@ class AuthService {
       throw new Error("Logout failed: " + error);
     }
   }
+
+  async getUser(token: string) {
+    try {
+      const response = await this.apiClient.get("/api/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data;
+
+      if (!data) {
+        return {
+          success: false,
+          message: "User not found",
+        };
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error("Get user failed: " + error);
+    }
+  }
 }
 
 export default new AuthService();
