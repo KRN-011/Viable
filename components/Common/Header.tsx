@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthRoute, setIsAuthRoute] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // check if the user is on authentication routes, if true -> Hide login and register buttons
   const isAuthRoutes = ["/login", "/register"];
@@ -22,6 +23,7 @@ export default function Header() {
     if (token) {
       setIsLoggedIn(true);
     }
+    setIsLoading(false);
   }, []);
 
   // handle logout
@@ -44,21 +46,29 @@ export default function Header() {
             className=""
           />
         </div>
-        <div className="flex justify-center items-center gap-8">
-          <Link
-            href="/"
-            className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
-          >
-            Home
-          </Link>
-          <Link
-            href="/posts"
-            className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
-          >
-            Posts
-          </Link>
-        </div>
-        {isLoggedIn ? (
+        {!isLoading && (
+          <div className="flex justify-center items-center gap-8">
+            <Link
+              href="/"
+              className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+            >
+              Home
+            </Link>
+            <Link
+              href="/posts"
+              className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+            >
+              Posts
+            </Link>
+            <Link
+              href="/writer/request"
+              className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
+            >
+              Become a Writer
+            </Link>
+          </div>
+        )}
+        {isLoggedIn && !isLoading ? (
           <div className="flex justify-center items-center gap-2">
             <button
               onClick={handleLogout}
@@ -68,7 +78,8 @@ export default function Header() {
             </button>
           </div>
         ) : (
-          !isAuthRoute && (
+          !isAuthRoute &&
+          !isLoading && (
             <div className="flex justify-center items-center gap-2">
               <Link
                 href="/login"
