@@ -1,4 +1,4 @@
-import { getUser } from "@/graphql/query/GetUser";
+import authService from "@/services/authService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function authMiddleware(request: NextRequest) {
@@ -6,9 +6,8 @@ export async function authMiddleware(request: NextRequest) {
   const publicPaths = ["/login", "/register"];
   const isPublicPath = publicPaths.includes(request.nextUrl.pathname);
 
-  // Read the token and user from cookies
+  // Read the token from cookies
   const token = request.cookies.get("token")?.value;
-  const userInCookies = JSON.parse(request.cookies.get("user")?.value || "{}");
 
   // If there's no token and trying to access a protected route
   if (!token && !isPublicPath) {
@@ -17,7 +16,13 @@ export async function authMiddleware(request: NextRequest) {
 
   // If there's a token, verify the user exists in database
   if (token && !isPublicPath) {
-    const user = await getUser(userInCookies?.email || "");
+    let user = null;
+
+    try {
+      user = await authService.getUser(token);
+    } catch (error) {
+      console.log(error);
+    }
 
     // If user doesn't exist in database but has cookies, clear them and redirect to login
     if (!user) {
