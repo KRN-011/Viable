@@ -12,3 +12,14 @@ export interface User {
   WriterConfirmed: boolean;
   RequestToBecomeWriter: boolean;
 }
+
+export interface Author {
+  authorName: string;
+  authorOccupation: string;
+  authorCountry: string;
+  authorState: string;
+  authorProfileImage: {
+    url: string;
+    alternativeText: string;
+  };
+}

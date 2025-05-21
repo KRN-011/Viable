@@ -1,6 +1,6 @@
 "use client";
 
-import CreatePostLayout from "@/layouts/createPost";
+import CreatePostLayout from "@/layouts/createPostLayout";
 import CreatePostForm from "@/components/Posts/CreatePostForm";
 
 export default function CreatePost() {
