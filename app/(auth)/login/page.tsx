@@ -44,9 +44,9 @@ export default function LoginPage() {
       const data = await response.json();
       const { jwt, user } = data;
 
-      // store the jwt in cookie & user in local storage
+      // store the jwt and user in cookies
       Cookies.set("token", jwt, { expires: 1 });
-      localStorage.setItem("user", JSON.stringify(user));
+      Cookies.set("user", JSON.stringify(user), { expires: 1 });
 
       toast.success("Login successful");
       router.push("/");

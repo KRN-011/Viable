@@ -80,8 +80,10 @@ export default function RegisterPage() {
       const data = await response.json();
       const { jwt, user } = data;
 
+      // store the jwt and user in cookies
       if (jwt && user) {
         Cookies.set("token", jwt, { expires: 1 });
+        Cookies.set("user", JSON.stringify(user), { expires: 1 });
         router.push("/login");
       }
 

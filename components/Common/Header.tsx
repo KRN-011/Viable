@@ -47,6 +47,14 @@ export default function Header() {
     setIsAuthRoute(isAuthRoutes.includes(pathname));
   }, [pathname]);
 
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    setIsLoading(false);
+  }, []);
+
   // handle logout
   const handleLogout = () => {
     Cookies.remove("token");
