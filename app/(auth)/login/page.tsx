@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CommonLayout from "@/layouts/commonLayout";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,8 +39,8 @@ export default function LoginPage() {
       const data = await response.json();
       const { jwt, user } = data;
 
-      // store the jwt in local storage
-      localStorage.setItem("token", jwt);
+      // store the jwt in cookie & user in local storage
+      Cookies.set("token", jwt, { expires: 1 });
       localStorage.setItem("user", JSON.stringify(user));
 
       router.push("/");

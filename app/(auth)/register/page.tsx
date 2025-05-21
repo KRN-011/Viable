@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CommonLayout from "@/layouts/commonLayout";
+import Cookies from "js-cookie";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -40,10 +41,9 @@ export default function RegisterPage() {
       const data = await response.json();
       const { jwt, user } = data;
 
-      // store the jwt in local storage
+      // store the jwt in cookie
       if (jwt && user) {
-        localStorage.setItem("token", jwt);
-        localStorage.setItem("user", JSON.stringify(user));
+        Cookies.set("token", jwt, { expires: 1 });
         router.push("/login");
       }
     } catch (error) {
