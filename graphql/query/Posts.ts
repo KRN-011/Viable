@@ -1,7 +1,8 @@
 import client from "@/lib/apolloClient";
 import { gql } from "@apollo/client";
 
-export const BLOGS_QUERY = gql`
+// Get all posts
+export const GET_ALL_POSTS = gql`
   query Posts {
     posts {
       title
@@ -28,7 +29,7 @@ export const BLOGS_QUERY = gql`
 export async function getPosts() {
   try {
     const { data } = await client.query({
-      query: BLOGS_QUERY,
+      query: GET_ALL_POSTS,
     });
 
     return data?.posts;

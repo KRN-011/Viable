@@ -110,14 +110,14 @@ export default function Header() {
                     Become a Writer
                   </Link>
                 )}
-                {userData.WriterConfirmed && (
+                {/* {userData.WriterConfirmed && (
                   <Link
                     href="/posts/create"
                     className="font-semibold text-primary relative before:content-[''] before:h-[2px] before:bg-text-primary before:absolute before:-bottom-1 before:left-0 before:transition-all before:duration-300 before:ease-in-out before:w-0 hover:before:w-full"
                   >
                     Create Post
                   </Link>
-                )}
+                )} */}
               </>
             )}
             <button
