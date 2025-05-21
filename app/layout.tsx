@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import Providers from "../components/Providers";
-import Header from "@/components/Common/Header";
-import Footer from "@/components/Common/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Viable",
@@ -16,10 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
-        <Header />
-        <Providers>{children}</Providers>
-        <Footer />
+      <body className={`antialiased bg-background-lightMuted`}>
+        <Providers>
+          <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+        </Providers>
       </body>
     </html>
   );
