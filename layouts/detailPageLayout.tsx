@@ -1,7 +1,7 @@
 import Footer from "@/components/Common/Footer";
 import Header from "@/components/Common/Header";
 
-export default function CreatePostLayout({
+export default function DetailPageLayout({
   children,
 }: {
   children: React.ReactNode;
