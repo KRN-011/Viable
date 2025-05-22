@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CommonLayout from "@/layouts/commonLayout";
 import Cookies from "js-cookie";
-import CustomButton from "@/components/ui/CustomButton";
 import { z } from "zod";
 import { toast } from "react-toastify";
+import FadeIn from "@/components/ui/FadeIn";
+import SharpEdgeButton from "@/components/ui/SharpEdgeButton";
+import SharpEdgeInput from "@/components/ui/SharpEdgeInput";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const registerSchema = z.object({
   username: z
@@ -37,6 +40,7 @@ export default function RegisterPage() {
   >({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [isLoginClicked, setIsLoginClicked] = useState(false);
 
   const validateField = (name: keyof RegisterFormData, value: string) => {
     try {
@@ -109,119 +113,124 @@ export default function RegisterPage() {
     validateField(name as keyof RegisterFormData, value);
   };
 
+  const handleLoginRedirect = () => {
+    setIsLoginClicked(true);
+  };
+
   return (
     <CommonLayout>
-      <div className="flex items-center justify-center bg-background-lightMuted mt-40 mb-40">
-        <div className="w-4/5 max-w-md space-y-8">
-          <div>
-            <h2 className="text-center text-3xl font-semibold text-primary">
-              Create your account
-            </h2>
-            <p className="mt-2 text-center text-gray-600">
-              Or{" "}
-              <Link
-                href="/login"
-                className="font-semibold text-sky-400 hover:text-sky-500 transition-colors duration-300"
-              >
-                sign in to your account
-              </Link>
-            </p>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            {submitError && (
-              <div
-                className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg"
-                role="alert"
-              >
-                <span className="block sm:inline">{submitError}</span>
-              </div>
-            )}
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-semibold text-gray-600 mb-1"
+      <FadeIn>
+        <div className="flex items-center justify-center pt-20 bg-background-lightMuted rounded-3xl max-w-2xl mx-auto">
+          <div className="w-4/5 max-w-md space-y-8">
+            <div className="mb-14">
+              <h2 className="text-center text-3xl font-semibold text-primary">
+                Create your account
+              </h2>
+              <p className="mt-2 text-center text-gray-600 flex items-center justify-center gap-2">
+                Or{" "}
+                <Link
+                  href="/login"
+                  onClick={handleLoginRedirect}
+                  className="font-semibold underline underline-offset-4 hover:underline-offset-2 transition-all duration-100 ease-out"
                 >
-                  Username
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  className={`appearance-none relative block w-full px-4 py-2 border ${
-                    errors.username ? "border-red-300" : "border-gray-200"
-                  } rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300`}
-                  placeholder="Enter your username"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                {errors.username && (
-                  <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+                  sign in to your account
+                </Link>
+                {isLoginClicked && (
+                  <LoadingSpinner size={4} absolute={false} className="ml-2" />
                 )}
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-600 mb-1"
-                >
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className={`appearance-none relative block w-full px-4 py-2 border ${
-                    errors.email ? "border-red-300" : "border-gray-200"
-                  } rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300`}
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-gray-600 mb-1"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className={`appearance-none relative block w-full px-4 py-2 border ${
-                    errors.password ? "border-red-300" : "border-gray-200"
-                  } rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300`}
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-                )}
-              </div>
+              </p>
             </div>
+            <form className="mt-8 space-y-10" onSubmit={handleSubmit}>
+              {submitError && (
+                <div
+                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg"
+                  role="alert"
+                >
+                  <span className="block sm:inline">{submitError}</span>
+                </div>
+              )}
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-semibold text-gray-600 mb-1"
+                  >
+                    Username
+                  </label>
+                  <SharpEdgeInput
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    placeholder="Enter your username"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                  {errors.username && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.username}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold text-gray-600 mb-1"
+                  >
+                    Email address
+                  </label>
+                  <SharpEdgeInput
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-semibold text-gray-600 mb-1"
+                  >
+                    Password
+                  </label>
+                  <SharpEdgeInput
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-            <div className="flex gap-2">
-              <CustomButton
-                type="submit"
-                disabled={isLoading}
-                className={`${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                {isLoading ? "Registering..." : "Register"}
-              </CustomButton>
-            </div>
-          </form>
+              <div className="flex gap-2">
+                <SharpEdgeButton
+                  type="submit"
+                  disabled={isLoading}
+                  className={`${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {isLoading ? "Registering..." : "Register"}
+                </SharpEdgeButton>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      </FadeIn>
     </CommonLayout>
   );
 }

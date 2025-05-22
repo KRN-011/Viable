@@ -29,6 +29,8 @@
     --text-secondary: 107 114 128;
     --text-muted: 107 114 128;
     --text-lightMuted: 229 231 235;
+    --text-dark: 249 250 251;
+    --text-light: 249 250 251;
   }
 
   /* Apply smooth transitions when theme changes */

@@ -2,6 +2,14 @@ import authService from "@/services/authService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function authMiddleware(request: NextRequest) {
+  // Skip middleware for root path
+  if (
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname === "/posts"
+  ) {
+    return NextResponse.next();
+  }
+
   // Public paths that don't require authentication
   const publicPaths = ["/login", "/register"];
   const isPublicPath = publicPaths.includes(request.nextUrl.pathname);

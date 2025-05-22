@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased bg-background-lightMuted`}>
+      <body className={`antialiased`}>
         <Providers>
           <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
           <ToastContainer
