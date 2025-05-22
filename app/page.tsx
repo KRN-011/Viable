@@ -1,11 +1,19 @@
 import CommonLayout from "@/layouts/commonLayout";
+import { getHomePage } from "@/graphql/query/Components";
+import FadeIn from "@/components/ui/FadeIn";
+import BlockRenderer from "@/lib/Blocks/BlockRenderer";
+import { Block, HomePage } from "@/lib/types/blocks";
 
 export default async function Home() {
+  const homePage = (await getHomePage()) as HomePage;
+
   return (
     <CommonLayout>
-      <div className="w-full">
-        <h1 className="text-2xl font-bold">Hello World</h1>
-      </div>
+      {homePage?.blocks?.map((block: Block) => (
+        <FadeIn key={block.__typename}>
+          <BlockRenderer block={block} />
+        </FadeIn>
+      ))}
     </CommonLayout>
   );
 }

@@ -35,6 +35,8 @@ module.exports = {
           secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
           muted: 'rgb(var(--text-muted) / <alpha-value>)',
           lightMuted: 'rgb(var(--text-light-muted) / <alpha-value>)',
+          dark: 'rgb(var(--text-dark) / <alpha-value>)',
+          light: 'rgb(var(--text-light) / <alpha-value>)',
         },
       },
     },

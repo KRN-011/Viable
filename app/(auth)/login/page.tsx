@@ -6,8 +6,10 @@ import Link from "next/link";
 import CommonLayout from "@/layouts/commonLayout";
 import Cookies from "js-cookie";
 import FadeIn from "@/components/ui/FadeIn";
-import CustomButton from "@/components/ui/CustomButton";
 import { toast } from "react-toastify";
+import SharpEdgeButton from "@/components/ui/SharpEdgeButton";
+import SharpEdgeInput from "@/components/ui/SharpEdgeInput";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,6 +19,7 @@ export default function LoginPage() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCreateAccountClicked, setIsCreateAccountClicked] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,26 +69,34 @@ export default function LoginPage() {
     }));
   };
 
+  const handleCreateAccountRedirect = () => {
+    setIsCreateAccountClicked(true);
+  };
+
   return (
     <CommonLayout>
       <FadeIn>
-        <div className="flex items-center justify-center bg-background-lightMuted py-40">
+        <div className="flex items-center justify-center pt-20 bg-background-lightMuted rounded-3xl max-w-2xl mx-auto">
           <div className="w-4/5 max-w-md space-y-8">
-            <div>
+            <div className="mb-14">
               <h2 className="text-center text-3xl font-semibold text-primary">
                 Sign in to your account
               </h2>
-              <p className="mt-2 text-center text-gray-600">
+              <p className="mt-2 text-center text-gray-600 flex items-center justify-center gap-2">
                 Or{" "}
                 <Link
                   href="/register"
-                  className="font-semibold text-sky-400 hover:text-sky-500 transition-colors duration-300"
+                  onClick={handleCreateAccountRedirect}
+                  className="font-semibold underline underline-offset-4 hover:underline-offset-2 transition-all duration-100 ease-out "
                 >
                   create a new account
                 </Link>
+                {isCreateAccountClicked && (
+                  <LoadingSpinner size={4} absolute={false} className="ml-2" />
+                )}
               </p>
             </div>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <form className="mt-8 space-y-10" onSubmit={handleSubmit}>
               {error && (
                 <div
                   className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg"
@@ -102,13 +113,12 @@ export default function LoginPage() {
                   >
                     Email address
                   </label>
-                  <input
+                  <SharpEdgeInput
                     id="email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    className="appearance-none relative block w-full px-4 py-2 border border-gray-200 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300"
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={handleChange}
@@ -121,13 +131,12 @@ export default function LoginPage() {
                   >
                     Password
                   </label>
-                  <input
+                  <SharpEdgeInput
                     id="password"
                     name="password"
                     type="password"
                     autoComplete="current-password"
                     required
-                    className="appearance-none relative block w-full px-4 py-2 border border-gray-200 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
@@ -136,13 +145,13 @@ export default function LoginPage() {
               </div>
 
               <div className="flex gap-2">
-                <CustomButton
+                <SharpEdgeButton
                   type="submit"
                   disabled={isLoading}
                   className={`${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {isLoading ? "Logging in..." : "Login"}
-                </CustomButton>
+                </SharpEdgeButton>
               </div>
             </form>
           </div>

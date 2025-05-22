@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getPosts } from "@/graphql/query/Posts";
 import { FaSearch } from "react-icons/fa";
 import getImageUrl from "@/lib/getImageUrl";
-import BlockRendererClient from "@/components/Common/StrapiBlockRenderer";
 import { BlocksContent } from "@strapi/blocks-react-renderer";
 import CommonLayout from "@/layouts/commonLayout";
+import CustomSkeleton from "@/components/ui/CustomSkeleton";
 
 interface Author {
   authorName: string;
@@ -25,6 +25,7 @@ interface Post {
   title: string;
   slug: string;
   content: BlocksContent;
+  excerpt: string;
   coverImage: {
     url: string;
     alternativeText: string;
@@ -56,17 +57,14 @@ function getBlocksText(blocks: BlocksContent, limit?: number): string {
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const postsData = await getPosts();
         setPosts(postsData);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching posts:", error);
-        setLoading(false);
       }
     };
 
@@ -81,30 +79,12 @@ export default function PostsPage() {
         ?.includes(searchTerm?.toLowerCase()),
   );
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="w-4/5 mx-auto">
-          <div className="animate-pulse space-y-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow-md p-6">
-                <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <CommonLayout>
-      <div className="min-h-screen py-12">
+      <div className="min-h-screen py-6">
         <div className="w-4/5 mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <div className="mb-16">
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">
               Blog Posts
             </h1>
             <div className="relative">
@@ -113,7 +93,7 @@ export default function PostsPage() {
                 placeholder="Search posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full md:w-96 px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                className="w-full md:w-96 px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-background-dark focus:border-transparent"
               />
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
@@ -127,21 +107,25 @@ export default function PostsPage() {
                 className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
               >
                 <div className="relative h-48">
-                  {post?.coverImage?.url && (
-                    <Image
-                      src={getImageUrl(post?.coverImage?.url) || ""}
-                      alt={post?.coverImage?.alternativeText}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
+                  <Suspense
+                    fallback={<CustomSkeleton className="h-full w-full" />}
+                  >
+                    {post?.coverImage?.url && (
+                      <Image
+                        src={getImageUrl(post?.coverImage?.url) || ""}
+                        alt={post?.coverImage?.alternativeText}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                  </Suspense>
                 </div>
                 <div className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-2">
                     {post?.title}
                   </h2>
                   <div className="line-clamp-3 text-gray-600 mb-4">
-                    <BlockRendererClient content={post?.content} />
+                    {post?.excerpt}
                   </div>
                   <div className="flex items-center space-x-4">
                     {post?.authors?.map((author) => (

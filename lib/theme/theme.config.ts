@@ -28,6 +28,8 @@ export const themeConfig = {
         secondary: "56 189 248", // Sky-500
         muted: "107 114 128", // Gray-500
         lightMuted: "229 231 235", // Light gray
+        dark: "17 24 39", // Dark text
+        light: "249 250 251", // Almost white
       },
     },
   },

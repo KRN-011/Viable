@@ -9,6 +9,7 @@ export const GET_ALL_POSTS = gql`
       title
       slug
       content
+      excerpt
       coverImage {
         url
         alternativeText
@@ -46,6 +47,7 @@ export const GET_POST_BY_SLUG = gql`
       title
       slug
       content
+      excerpt
       coverImage {
         url
         alternativeText
